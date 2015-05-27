@@ -13,6 +13,9 @@ public class CamVerse {
      */
     public static void main(String[] args) {
         // TODO code application logic here
+        CamVerseUI cvX = new CamVerseUI();
+        cvX.setTitle("CamVerse - Visor de webcam");
+        cvX.setVisible(true);
     }
     
 }
