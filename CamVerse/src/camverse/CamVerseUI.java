@@ -82,7 +82,7 @@ public class CamVerseUI extends javax.swing.JFrame {
             .addGap(0, 470, Short.MAX_VALUE)
         );
 
-        jLabel1.setFont(new java.awt.Font("MS UI Gothic", 1, 120)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Verdana", 1, 100)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(0, 102, 102));
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("CamVerse");
@@ -144,7 +144,7 @@ public class CamVerseUI extends javax.swing.JFrame {
         });
 
         jLabel7.setBackground(new java.awt.Color(255, 255, 255));
-        jLabel7.setFont(new java.awt.Font("MS UI Gothic", 0, 60)); // NOI18N
+        jLabel7.setFont(new java.awt.Font("Verdana", 0, 60)); // NOI18N
         jLabel7.setForeground(new java.awt.Color(0, 102, 102));
         jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel7.setText("Foto");
@@ -152,7 +152,7 @@ public class CamVerseUI extends javax.swing.JFrame {
         jLabel7.setOpaque(true);
 
         jLabel8.setBackground(new java.awt.Color(255, 255, 255));
-        jLabel8.setFont(new java.awt.Font("MS UI Gothic", 0, 60)); // NOI18N
+        jLabel8.setFont(new java.awt.Font("Verdana", 0, 60)); // NOI18N
         jLabel8.setForeground(new java.awt.Color(0, 102, 102));
         jLabel8.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel8.setText("Video");
@@ -160,7 +160,7 @@ public class CamVerseUI extends javax.swing.JFrame {
         jLabel8.setOpaque(true);
 
         jLabel9.setBackground(new java.awt.Color(255, 255, 255));
-        jLabel9.setFont(new java.awt.Font("MS UI Gothic", 0, 60)); // NOI18N
+        jLabel9.setFont(new java.awt.Font("Verdana", 0, 55)); // NOI18N
         jLabel9.setForeground(new java.awt.Color(0, 102, 102));
         jLabel9.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel9.setText("Marco");
@@ -168,7 +168,7 @@ public class CamVerseUI extends javax.swing.JFrame {
         jLabel9.setOpaque(true);
 
         jLabel10.setBackground(new java.awt.Color(255, 255, 255));
-        jLabel10.setFont(new java.awt.Font("MS UI Gothic", 0, 60)); // NOI18N
+        jLabel10.setFont(new java.awt.Font("Verdana", 0, 60)); // NOI18N
         jLabel10.setForeground(new java.awt.Color(0, 102, 102));
         jLabel10.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel10.setText("Filtro");
