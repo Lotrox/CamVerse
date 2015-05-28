@@ -26,13 +26,18 @@ import com.jhlabs.image.WaterFilter;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.awt.image.BufferedImageOp;
+import java.io.File;
 import java.io.FileInputStream;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 
 import java.util.List;
 import javax.imageio.ImageIO;
+import javax.swing.DefaultListModel;
 import javax.swing.JComboBox;
+import javax.swing.JList;
 
 /**
  * <b>Implementa las operaciones lógicas de la aplicación y de interacción con la interfaz.</b>
@@ -124,17 +129,24 @@ public class CamVerseLogic {
         }
     }
     
+    /**
+     * <b>Dada una imagen y una plantilla, la superpone en la imagen.</b>
+     * @param image Imagen de entrada.
+     * @param template Imagen plantilla de entrada.
+     * @return Imagen de salida correspondiente a la imagen de entrada con la plantilla superpuesta.
+     */
     public static BufferedImage templateBI(BufferedImage image, BufferedImage template) {
-        BufferedImage modified = new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_INT_RGB);
-        
-        Graphics2D g2 = modified.createGraphics();
-        g2.drawImage(image, null, 0, 0);
-        g2.drawImage(template, null, 0, 0);
-        g2.dispose();
-
-        modified.flush();
-
-        return modified;
+        if (template!=null) {
+            BufferedImage modified = new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_INT_RGB);
+            Graphics2D g2 = modified.createGraphics();
+            g2.drawImage(image, null, 0, 0);
+            g2.drawImage(template, null, 0, 0);
+            g2.dispose();
+            modified.flush();
+            return modified;
+        } else {
+            return image;
+        }
     }
     
     /**
@@ -152,12 +164,54 @@ public class CamVerseLogic {
     }
     
     /**
-     * <b>Genera una ruta para llegar a un fichero empezando desde el directorio actual, y posteriormente especificando un directorio padre y el nombre de fichero.</b>
+     * <b>Genera una ruta absoluta para llegar a un fichero empezando desde el directorio actual, y posteriormente especificando un directorio padre y el nombre de fichero.</b>
      * @param parent Nombre del directorio.
      * @param filename Nombre del fichero.
      * @return Ruta absoluta que empieza desde el directorio actual y recorre el directorio padre hasta llegar al nombre del fichero.
      */
     public static String generateRoute(String parent, String filename) {
         return Paths.get(Paths.get(".").toAbsolutePath().normalize().toString(),parent,filename).toString();
+    }
+    
+    /**
+     * <b>A partir de la ruta relativa de un directorio, escanea el nombre de los ficheros existentes y busca ficheros con extensión dada.</b>
+     * @param relativeDir Directorio relativo a escanear.
+     * @param ext Extensión de los ficheros buscados.
+     * @return Un vector con el nombre de los ficheros existentes con extensión dada en ese directorio.
+     */
+    public static List<String> directoryListing(String relativeDir, final String ext) {
+        FilenameFilter extFilter = new FilenameFilter() {
+            public boolean accept(File dir, String name) {
+                    String lowercaseName = name.toLowerCase();
+                    if (lowercaseName.endsWith(ext)) {
+                            return true;
+                    } else {
+                            return false;
+                    }
+            }
+        };
+        
+        File dir = new File(relativeDir);
+        File[] files = dir.listFiles(extFilter);
+        
+        List<String> fl = new ArrayList<>();
+        for (int i=files.length-1; i>=0; --i) {
+            if (!files[i].isDirectory()) fl.add((files[i].getName()).substring(0, files[i].getName().lastIndexOf('.')));
+        }
+        
+        return fl;
+    }
+    
+    public static void updateTemplates(JList jl, List<String> l) {
+        final String[] strings = new String[l.size()+1];
+        strings[0] = "- Deshabilitar -";
+        int c = 1;
+        for (String s : l) {
+            strings[c++] = s;
+        }
+        jl.setModel(new javax.swing.AbstractListModel() {
+            public int getSize() { return strings.length; }
+            public Object getElementAt(int i) { return strings[i]; }
+        });
     }
 }

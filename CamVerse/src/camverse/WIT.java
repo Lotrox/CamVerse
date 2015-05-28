@@ -30,7 +30,10 @@ public class WIT implements WebcamImageTransformer {
      */
     private int filter;
     
-    private BufferedImage IMAGE_FRAME = getImage(generateRoute("template","A.png"));
+    /**
+     * Marco cargado para aplicar a la webcam.
+     */
+    private BufferedImage IMAGE_FRAME = null;
 
     public WIT() {
         zoom = 100;
@@ -46,7 +49,6 @@ public class WIT implements WebcamImageTransformer {
         image = templateBI(image,IMAGE_FRAME);
         return image;
     }
-    
 
     public void setZoom(int _zoom) {
         zoom = _zoom;
@@ -59,5 +61,8 @@ public class WIT implements WebcamImageTransformer {
     public void setFilter(int _filter) {
         filter = _filter;
     }
-
+    
+    public void setTemplate(String filename) {
+        IMAGE_FRAME = (filename==null) ? null : getImage(generateRoute("template",filename));
+    }
 }
