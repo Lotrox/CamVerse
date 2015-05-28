@@ -35,7 +35,6 @@ import java.util.ArrayList;
 
 import java.util.List;
 import javax.imageio.ImageIO;
-import javax.swing.DefaultListModel;
 import javax.swing.JComboBox;
 import javax.swing.JList;
 
@@ -48,7 +47,6 @@ public class CamVerseLogic {
      * Instancias de filtros disponibles.
      */
     private static final BufferedImageOp[] filters = new BufferedImageOp[] {
-        new CrystallizeFilter(),
         new DitherFilter(),
         new ExposureFilter(),
         new FBMFilter(),
@@ -59,6 +57,7 @@ public class CamVerseLogic {
         new InvertFilter(),
         new KaleidoscopeFilter(),
         new LightFilter(),
+        new CrystallizeFilter(),
         new NoiseFilter(),
         new SharpenFilter(),
         new SolarizeFilter(),
@@ -156,7 +155,6 @@ public class CamVerseLogic {
      */
     public static BufferedImage getImage(String image) {
         try {
-            System.out.println(image);
             return ImageIO.read(new FileInputStream(image));
         } catch (IOException e) {
             throw new RuntimeException(e);
