@@ -6,6 +6,7 @@
 package camverse;
 
 import com.github.sarxos.webcam.Webcam;
+import com.github.sarxos.webcam.WebcamResolution;
 import com.jhlabs.image.CrystallizeFilter;
 import com.jhlabs.image.DitherFilter;
 import com.jhlabs.image.ExposureFilter;
@@ -23,6 +24,7 @@ import com.jhlabs.image.SolarizeFilter;
 import com.jhlabs.image.SphereFilter;
 import com.jhlabs.image.ThresholdFilter;
 import com.jhlabs.image.WaterFilter;
+import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.awt.image.BufferedImageOp;
@@ -80,6 +82,17 @@ public class CamVerseLogic {
         return (l.isEmpty()) ? null : (active!=null) ? active : Webcam.getDefault();
     }
     
+    public static Dimension[] updateResolution(Webcam activeWebcam, JComboBox jcb) {
+        jcb.removeAllItems();
+        Dimension[] ds = activeWebcam.getViewSizes();
+        for (int i=ds.length-1; i>=0; --i) {
+            jcb.addItem(ds[i].toString().substring(18));
+        }
+//        jcb.addItem(" - Apagar Webcam - ");
+        activeWebcam.setViewSize(ds[ds.length-1]);
+        return ds;
+    }
+    
     /**
      * <b>Dada una imagen y un ángulo de rotación en grados, gira la imagen respecto al ángulo.</b>
      * @param img Imagen de entrada.
@@ -111,6 +124,34 @@ public class CamVerseLogic {
     }
     
     /**
+     * <b>Dada una imagen y un factor de escala, aumenta o disminuye la imagen (ocupando las mismas dimensiones).</b>
+     * @param img Imagen de entrada.
+     * @param sx Factor de escala en X.
+     * @param sy Factor de escala en Y.
+     * @return Imagen de salida con la escala aplicada.
+     */
+    public static BufferedImage scaleBI(BufferedImage img, float sx, float sy) {
+        BufferedImage newImage = new BufferedImage(img.getWidth(), img.getHeight(), BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g2 = newImage.createGraphics();
+        g2.scale(sx,sy);  
+        g2.drawImage(img,null,0,0);
+        return newImage;    
+    }
+    
+    /**
+     * <b>Adapta una imagen a la resolución X,Y.</b>
+     * @param input Entrada de imagen.
+     * @param x Tamaño para x.
+     * @param y Tamaño para y.
+     * @return Imagen de salida adaptada.
+     */
+    public static BufferedImage prepareFI(BufferedImage input, int x, int y) {
+        float sx = ((float)x)/input.getWidth(),
+              sy = ((float)y)/input.getHeight();
+        return (sx!=1 || sy!=1) ? scaleBI(input,sx,sy) : input;
+    }
+    
+    /**
      * <b>Dada una imagen y el índice+1 de un filtro, lo aplica a la imagen.</b>
      * Si el índice es 0, no aplica filtro.
      * @param image Imagen de entrada.
@@ -137,6 +178,7 @@ public class CamVerseLogic {
     public static BufferedImage templateBI(BufferedImage image, BufferedImage template) {
         if (template!=null) {
             BufferedImage modified = new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_INT_RGB);
+            template = prepareFI(template, image.getWidth(), image.getHeight());
             Graphics2D g2 = modified.createGraphics();
             g2.drawImage(image, null, 0, 0);
             g2.drawImage(template, null, 0, 0);

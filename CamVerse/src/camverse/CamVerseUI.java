@@ -8,7 +8,7 @@ package camverse;
 import static camverse.CamVerseLogic.*;
 import com.github.sarxos.webcam.Webcam;
 import com.github.sarxos.webcam.WebcamPanel;
-import com.github.sarxos.webcam.WebcamResolution;
+import java.awt.Dimension;
 import java.awt.Image;
 import java.awt.event.ItemEvent;
 import java.io.File;
@@ -17,6 +17,7 @@ import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
+import javax.swing.ComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.event.ChangeEvent;
@@ -26,22 +27,29 @@ import javax.swing.event.ListSelectionListener;
 
 
 public class CamVerseUI extends javax.swing.JFrame {
+    
     /**
      * Webcam que se encuentra activa.
      */
     private Webcam activeWebcam;
+    
     /**
      * Hilo para ejecutar la grabación de vídeo.
      */
     Record threadRecord;
-
-    /**
-     * Creates new form CamVerseUI
-     */
     
+    /**
+     * Listado de dimensiones alternativas.
+     */
+    private Dimension[] dalt;
+    
+    /**
+     * <b>Constructor de interfaz gráfica.</b>
+     */
     public CamVerseUI() {
         activeWebcam = null;
         threadRecord = null;
+        dalt = null;
         
         // Java UI.
         initComponents();
@@ -65,16 +73,18 @@ public class CamVerseUI extends javax.swing.JFrame {
     private void refreshWebcam() {
         if (jPanel1 instanceof WebcamPanel) ((WebcamPanel)jPanel1).stop();
         remove(jPanel1);
-        // Fija la resolución.
-        activeWebcam.setViewSize(WebcamResolution.VGA.getSize());
-        // Transformaciones.
-        activeWebcam.setImageTransformer(new WIT());
-        activeWebcam.open();
+        dalt = updateResolution(activeWebcam,jComboBox2);
+        ComboBoxModel cbm = jComboBox2.getModel();
+        
+        activeWebcam.setImageTransformer(new WIT()); // Transformaciones.
+        activeWebcam.open(); // Abre la webcam al mundo.
+
         jPanel1 = new WebcamPanel(activeWebcam);
         jList1.setSelectedIndex(0);
         jList2.setSelectedIndex(0);
         constructLayout();
         getListWebcam(jComboBox1, activeWebcam);
+        jComboBox2.setModel(cbm);
         updateTemplates(jList2,directoryListing("templates",".png"));
         revalidate();
         repaint();
@@ -535,6 +545,27 @@ public class CamVerseUI extends javax.swing.JFrame {
     
     private void jComboBox2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox2ActionPerformed
         // TODO add your handling code here:
+        Date date = new Date(evt.getWhen());
+        if(date.getTime() > anterior.getTime()+200){
+            anterior = new Date();
+            String sA = activeWebcam.getViewSize().toString().substring(18);
+            String sJ = (String) jComboBox2.getSelectedItem();
+            if (!sA.equals(sJ)) {
+                System.out.println(sA + "," + sJ);
+                Dimension def = null;
+                for (Dimension d : dalt) {
+                    if (d.toString().substring(18).equals(sJ)) {
+                        def = d;
+                    }
+                }
+                if (def!=null) {
+                    boolean openpls = activeWebcam.isOpen();
+                    if (openpls) ((WebcamPanel)jPanel1).stop();
+                    activeWebcam.setViewSize(def);
+                    if (openpls) ((WebcamPanel)jPanel1).start();
+                }
+            }
+        }
     }//GEN-LAST:event_jComboBox2ActionPerformed
 
     private void jCheckBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox1ActionPerformed
@@ -605,7 +636,7 @@ public class CamVerseUI extends javax.swing.JFrame {
                     Thread th = new Thread(threadRecord);
                     th.start();  
                 }
-                if(jToggleButton1.getText().equals("DETENER GRABACIÓN")) threadRecord.parar();  
+                if(jToggleButton1.getText().equals("DETÉN GRABACIÓN")) threadRecord.parar();  
             }
     }//GEN-LAST:event_jToggleButton1ActionPerformed
 
