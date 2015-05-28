@@ -100,7 +100,7 @@ public class CamVerseUI extends javax.swing.JFrame {
     private void constructLayout() {
         jPanel1.setOpaque(false);
         jPanel1.setBackground(new java.awt.Color(51, 51, 51));
-        jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 5));
+        jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(102, 0, 0), 5));
         jPanel1.setPreferredSize(new java.awt.Dimension(640, 480));
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -457,10 +457,17 @@ public class CamVerseUI extends javax.swing.JFrame {
 
     private void jCheckBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox1ActionPerformed
         // TODO add your handling code here:
+        if (jPanel1 instanceof WebcamPanel) {
+            ((WebcamPanel)jPanel1).setMirrored(jCheckBox1.isSelected());
+        }
     }//GEN-LAST:event_jCheckBox1ActionPerformed
 
     private void jCheckBox2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox2ActionPerformed
         // TODO add your handling code here:
+        if (jPanel1 instanceof WebcamPanel) {
+            ((WebcamPanel)jPanel1).setFPSDisplayed(jCheckBox2.isSelected());
+            ((WebcamPanel)jPanel1).setDisplayDebugInfo(jCheckBox2.isSelected());
+        }
     }//GEN-LAST:event_jCheckBox2ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
