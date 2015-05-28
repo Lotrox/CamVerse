@@ -16,12 +16,17 @@ public class CamVerseUI extends javax.swing.JFrame {
      * Webcam que se encuentra activa.
      */
     private Webcam activeWebcam;
+    /**
+     * Hilo para ejecutar la grabación de vídeo.
+     */
+    Record threadRecord;
 
     /**
      * Creates new form CamVerseUI
      */
     public CamVerseUI() {
         activeWebcam = null;
+        threadRecord = null;
         
         // Java UI.
         initComponents();
@@ -147,7 +152,7 @@ public class CamVerseUI extends javax.swing.JFrame {
         jLabel4.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel4.setText("Frames por segundo:");
 
-        jComboBox3.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jComboBox3.setModel(new javax.swing.DefaultComboBoxModel(new Integer[] { 5, 10, 15, 25, 30, 45 }));
         jComboBox3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jComboBox3ActionPerformed(evt);
@@ -475,7 +480,9 @@ public class CamVerseUI extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jComboBox3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox3ActionPerformed
-        // TODO add your handling code here:
+        
+    /*No se pueden limitar los FPS*/
+                
     }//GEN-LAST:event_jComboBox3ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
@@ -489,9 +496,17 @@ public class CamVerseUI extends javax.swing.JFrame {
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton3ActionPerformed
-
+    
+    private int contador = 0;
     private void jToggleButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButton1ActionPerformed
-        // TODO add your handling code here:
+            contador++;
+            if(jToggleButton1.getText().equals("INICIAR GRABACIÓN") && (contador%3 == 0)){
+                contador = 0;
+                threadRecord = new Record(activeWebcam, jToggleButton1);
+                Thread th = new Thread(threadRecord);
+                th.start();  
+            }
+            if(jToggleButton1.getText().equals("DETENER GRABACIÓN") && (contador%3 == 0)) threadRecord.parar();         
     }//GEN-LAST:event_jToggleButton1ActionPerformed
 
     /**
