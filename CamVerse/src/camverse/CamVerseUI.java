@@ -18,7 +18,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
-import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -293,7 +292,7 @@ public class CamVerseUI extends javax.swing.JFrame {
         jList1.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(102, 51, 0), 1, true));
         jList1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jList1.setModel(new javax.swing.AbstractListModel() {
-            String[] strings = { "- Deshabilitar -", "CrystallizeFilter", "DitherFilter", "ExposureFilter", "FBMFilter", "GammaFilter", "GaussianFilter", "GlowFilter", "GrayscaleFilter", "InvertFilter", "KaleidoscopeFilter", "LightFilter", "NoiseFilter", "SharpenFilter", "SolarizeFilter", "SphereFilter", "ThresholdFilter", "WaterFilter" };
+            String[] strings = { "- Deshabilitar -", "DitherFilter", "ExposureFilter", "FBMFilter", "GammaFilter", "GaussianFilter", "GlowFilter", "GrayscaleFilter", "InvertFilter", "KaleidoscopeFilter", "LightFilter", "CrystallizeFilter", "NoiseFilter", "SharpenFilter", "SolarizeFilter", "SphereFilter", "ThresholdFilter", "WaterFilter" };
             public int getSize() { return strings.length; }
             public Object getElementAt(int i) { return strings[i]; }
         });

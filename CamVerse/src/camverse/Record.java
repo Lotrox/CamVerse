@@ -56,7 +56,7 @@ public class Record implements Runnable{
         long start = System.currentTimeMillis();
         jtb.setText("DETENER GRABACIÓN");
         int time = (int) (System.currentTimeMillis()/1000);
-        for (int i = 0; !stop; i++) {
+        for (int i = 0; !stop && wc.isOpen(); i++) {
             if(((int)(System.currentTimeMillis()/1000)-time) % 2 == 0) jtb.setText("DETENER GRABACIÓN");
             else jtb.setText(String.valueOf((int)(System.currentTimeMillis()/1000)-time) + " SEGUNDOS");
             BufferedImage image = ConverterFactory.convertToType(wc.getImage(), BufferedImage.TYPE_3BYTE_BGR);

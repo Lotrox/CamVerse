@@ -47,7 +47,6 @@ public class CamVerseLogic {
      * Instancias de filtros disponibles.
      */
     private static final BufferedImageOp[] filters = new BufferedImageOp[] {
-        new CrystallizeFilter(),
         new DitherFilter(),
         new ExposureFilter(),
         new FBMFilter(),
@@ -58,6 +57,7 @@ public class CamVerseLogic {
         new InvertFilter(),
         new KaleidoscopeFilter(),
         new LightFilter(),
+        new CrystallizeFilter(),
         new NoiseFilter(),
         new SharpenFilter(),
         new SolarizeFilter(),
