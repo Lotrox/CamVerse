@@ -74,6 +74,7 @@ public class CamVerseUI extends javax.swing.JFrame {
         jPanel1 = new WebcamPanel(activeWebcam);
         constructLayout();
         getListWebcam(jComboBox1, activeWebcam);
+        updateTemplates(jList2,directoryListing("templates",".png"));
         revalidate();
         repaint();
     }
@@ -299,7 +300,6 @@ public class CamVerseUI extends javax.swing.JFrame {
         jList1.addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent e) {
-                jList1ListSelectionEvent(e);
                 if (activeWebcam != null) {
                     ((WIT)activeWebcam.getImageTransformer()).setFilter(jList1.getLeadSelectionIndex());
                 }
@@ -316,6 +316,18 @@ public class CamVerseUI extends javax.swing.JFrame {
         });
         jList2.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         jList2.setToolTipText("");
+        jList2.addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                if (activeWebcam != null) {
+                    if (jList2.getLeadSelectionIndex() > 0) {
+                        ((WIT)activeWebcam.getImageTransformer()).setTemplate(((String)jList2.getModel().getElementAt(jList2.getSelectedIndex())) + ".png");
+                    } else {
+                        ((WIT)activeWebcam.getImageTransformer()).setTemplate(null);
+                    }
+                }
+            }
+        });
         jScrollPane2.setViewportView(jList2);
 
         jLabel14.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
@@ -335,7 +347,6 @@ public class CamVerseUI extends javax.swing.JFrame {
         jSlider1.addChangeListener(new ChangeListener() {
             @Override
             public void stateChanged(ChangeEvent e) {
-                jSlider1ChangeEvent(e);
                 if (activeWebcam != null) {
                     ((WIT)activeWebcam.getImageTransformer()).setZoom(jSlider1.getValue());
                 }
@@ -352,7 +363,6 @@ public class CamVerseUI extends javax.swing.JFrame {
         jSlider2.addChangeListener(new ChangeListener() {
             @Override
             public void stateChanged(ChangeEvent e) {
-                jSlider2ChangeEvent(e);
                 if (activeWebcam != null) {
                     ((WIT)activeWebcam.getImageTransformer()).setRotate(jSlider2.getValue());
                 }
@@ -520,16 +530,6 @@ public class CamVerseUI extends javax.swing.JFrame {
             System.out.println("Iniciando " + activeWebcam);
             refreshWebcam();
         }
-    }
-    
-    private void jList1ListSelectionEvent(ListSelectionEvent e) {
-        System.out.println(jList1.getModel().getElementAt(jList1.getLeadSelectionIndex()));
-    }
-    private void jSlider1ChangeEvent(ChangeEvent e) {
-        System.out.println(jSlider1.getValue());
-    }
-    private void jSlider2ChangeEvent(ChangeEvent e) {
-        System.out.println(jSlider2.getValue());
     }
     
     private void jComboBox2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox2ActionPerformed
