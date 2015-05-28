@@ -38,9 +38,6 @@ public class CamVerseUI extends javax.swing.JFrame {
             e.printStackTrace();
         }
         
-        // Fija la resolución.
-        activeWebcam.setViewSize(WebcamResolution.VGA.getSize());
-        
         // Enciende la webcam.
         refreshWebcam();
     }
@@ -48,6 +45,9 @@ public class CamVerseUI extends javax.swing.JFrame {
     private void refreshWebcam() {
         if (jPanel1 instanceof WebcamPanel) ((WebcamPanel)jPanel1).stop();
         remove(jPanel1);
+        // Fija la resolución.
+        activeWebcam.setViewSize(WebcamResolution.VGA.getSize());
+        activeWebcam.open();
         jPanel1 = new WebcamPanel(activeWebcam);
         constructLayout();
         getListWebcam(jComboBox1, activeWebcam);
