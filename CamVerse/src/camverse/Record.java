@@ -19,6 +19,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import javax.swing.JToggleButton;
 
@@ -29,11 +30,13 @@ public class Record implements Runnable{
     private final JToggleButton jtb;
     private boolean stop;
     private String path;
+    private JComboBox jcb;
     
-    public Record (Webcam activeWebcam, JToggleButton jtb, String path){
+    public Record (Webcam activeWebcam, JToggleButton jtb, String path, JComboBox jcb){
         this.wc = activeWebcam;
         this.jtb = jtb;
         this.path = path;
+        this.jcb = jcb;
     }
     
     public void parar(){
@@ -67,8 +70,8 @@ public class Record implements Runnable{
             writer.encodeVideo(0, frame);
 
             try {
-                //30 FPS
-                Thread.sleep(5);
+                //30 FPS por defecto
+                Thread.sleep(1000/(int)jcb.getSelectedItem());
             } catch (InterruptedException ex) {
                 Logger.getLogger(CamVerseUI.class.getName()).log(Level.SEVERE, null, ex);
             }

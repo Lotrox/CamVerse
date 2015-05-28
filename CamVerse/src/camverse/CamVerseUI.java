@@ -38,6 +38,8 @@ public class CamVerseUI extends javax.swing.JFrame {
      * Creates new form CamVerseUI
      */
     private int contador = 0;
+    private int numFps = 30;
+    
     public CamVerseUI() {
         activeWebcam = null;
         threadRecord = null;
@@ -166,9 +168,9 @@ public class CamVerseUI extends javax.swing.JFrame {
         jLabel3.setText("Resolución:");
 
         jLabel4.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jLabel4.setText("Frames por segundo:");
+        jLabel4.setText("Frames por segundo (Grabación):");
 
-        jComboBox3.setModel(new javax.swing.DefaultComboBoxModel(new Integer[] { 5, 10, 15, 25, 30, 45 }));
+        jComboBox3.setModel(new javax.swing.DefaultComboBoxModel(new Integer[] { 45, 30, 25, 15, 10 }));
         jComboBox3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jComboBox3ActionPerformed(evt);
@@ -554,9 +556,11 @@ public class CamVerseUI extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jComboBox3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox3ActionPerformed
-        
-    /*No se pueden limitar los FPS*/
-                
+        contador++;
+        if(contador%3 == 0){
+            System.out.print(String.valueOf(jComboBox3.getSelectedItem()+"\n"));
+            numFps = (int)jComboBox3.getSelectedItem();
+        }
     }//GEN-LAST:event_jComboBox3ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
@@ -592,7 +596,7 @@ public class CamVerseUI extends javax.swing.JFrame {
             contador++;
             if(jToggleButton1.getText().equals("INICIAR GRABACIÓN") && (contador%3 == 0)){
                 contador = 0;
-                threadRecord = new Record(activeWebcam, jToggleButton1, jLabel13.getText());
+                threadRecord = new Record(activeWebcam, jToggleButton1, jLabel13.getText(), jComboBox3);
                 Thread th = new Thread(threadRecord);
                 th.start();  
             }
