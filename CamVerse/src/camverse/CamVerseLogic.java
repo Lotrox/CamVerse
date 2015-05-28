@@ -182,12 +182,11 @@ public class CamVerseLogic {
     public static List<String> directoryListing(String relativeDir, final String ext) {
         FilenameFilter extFilter = new FilenameFilter() {
             public boolean accept(File dir, String name) {
-                    String lowercaseName = name.toLowerCase();
-                    if (lowercaseName.endsWith(ext)) {
-                            return true;
-                    } else {
-                            return false;
-                    }
+                if (name.endsWith(ext)) {
+                        return true;
+                } else {
+                        return false;
+                }
             }
         };
         
@@ -202,6 +201,11 @@ public class CamVerseLogic {
         return fl;
     }
     
+    /**
+     * <b>Actualiza los marcos disponibles que se muestran en la lista de marcos.</b>
+     * @param jl Lista visual de Java donde se guardarán los marcos disponibles.
+     * @param l Lista con los nombres de fichero de los marcos disponibles.
+     */
     public static void updateTemplates(JList jl, List<String> l) {
         final String[] strings = new String[l.size()+1];
         strings[0] = "- Deshabilitar -";

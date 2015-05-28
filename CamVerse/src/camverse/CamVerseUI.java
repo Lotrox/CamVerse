@@ -312,6 +312,18 @@ public class CamVerseUI extends javax.swing.JFrame {
         });
         jList2.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         jList2.setToolTipText("");
+        jList2.addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                if (activeWebcam != null) {
+                    if (jList2.getLeadSelectionIndex() > 0) {
+                        ((WIT)activeWebcam.getImageTransformer()).setTemplate(((String)jList2.getModel().getElementAt(jList2.getSelectedIndex())) + ".png");
+                    } else {
+                        ((WIT)activeWebcam.getImageTransformer()).setTemplate(null);
+                    }
+                }
+            }
+        });
         jScrollPane2.setViewportView(jList2);
 
         jLabel14.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N

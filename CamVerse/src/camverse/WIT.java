@@ -63,6 +63,6 @@ public class WIT implements WebcamImageTransformer {
     }
     
     public void setTemplate(String filename) {
-        IMAGE_FRAME = (filename==null) ? null : getImage(generateRoute("template",filename));
+        IMAGE_FRAME = (filename==null) ? null : getImage(generateRoute("templates",filename));
     }
 }
