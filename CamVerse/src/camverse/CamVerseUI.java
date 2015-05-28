@@ -9,7 +9,17 @@ import static camverse.CamVerseLogic.*;
 import com.github.sarxos.webcam.Webcam;
 import com.github.sarxos.webcam.WebcamPanel;
 import com.github.sarxos.webcam.WebcamResolution;
+import java.awt.Image;
 import java.awt.event.ItemEvent;
+import java.io.File;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.imageio.ImageIO;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+import javax.swing.JFileChooser;
+import javax.swing.SwingConstants;
 
 public class CamVerseUI extends javax.swing.JFrame {
     /**
@@ -24,6 +34,7 @@ public class CamVerseUI extends javax.swing.JFrame {
     /**
      * Creates new form CamVerseUI
      */
+    private int contador = 0;
     public CamVerseUI() {
         activeWebcam = null;
         threadRecord = null;
@@ -241,9 +252,18 @@ public class CamVerseUI extends javax.swing.JFrame {
         jLabel12.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel12.setText("Ruta de almacenamiento:");
 
-        jLabel13.setText("Ruta65:\\\\4\\\\3\\\\2\\\\1\\\\fotos");
+        jLabel13.setText("/CamVerse");
 
-        jButton3.setText("...");
+        jButton3.setText(" ");
+        Image img;
+        try {
+            img = ImageIO.read(new File("src/resources/save.png"));
+            jButton3.setIcon(new ImageIcon(img));
+            jButton3.setHorizontalAlignment(NORMAL);
+            
+        } catch (IOException ex) {
+            Logger.getLogger(CamVerseUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
         jButton3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton3ActionPerformed(evt);
@@ -494,15 +514,30 @@ public class CamVerseUI extends javax.swing.JFrame {
     }//GEN-LAST:event_jComboBox4ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        // TODO add your handling code here:
+        contador++;
+
+        if(contador%3 == 0){
+            JFileChooser chooser = new JFileChooser();
+            chooser.setCurrentDirectory(new java.io.File("."));
+            chooser.setDialogTitle("Directorio de guardado");
+            chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+            chooser.setAcceptAllFileFilterUsed(false);
+
+            if (chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+              jLabel13.setText(chooser.getCurrentDirectory().getPath());
+              System.out.print(jLabel13.getText());
+            } else {
+              System.out.println("Ninguna seleccion ");
+            }
+        }
     }//GEN-LAST:event_jButton3ActionPerformed
     
-    private int contador = 0;
+    
     private void jToggleButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButton1ActionPerformed
             contador++;
             if(jToggleButton1.getText().equals("INICIAR GRABACIÓN") && (contador%3 == 0)){
                 contador = 0;
-                threadRecord = new Record(activeWebcam, jToggleButton1);
+                threadRecord = new Record(activeWebcam, jToggleButton1, jLabel13.getText());
                 Thread th = new Thread(threadRecord);
                 th.start();  
             }
