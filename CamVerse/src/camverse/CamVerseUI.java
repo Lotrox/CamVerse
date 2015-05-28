@@ -12,6 +12,8 @@ import com.github.sarxos.webcam.WebcamResolution;
 import java.awt.event.ItemEvent;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 public class CamVerseUI extends javax.swing.JFrame {
     /**
@@ -260,12 +262,21 @@ public class CamVerseUI extends javax.swing.JFrame {
         jList1.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(102, 51, 0), 1, true));
         jList1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jList1.setModel(new javax.swing.AbstractListModel() {
-            String[] strings = { "CrystallizeFilter", "DitherFilter", "ExposureFilter", "FBMFilter", "GammaFilter", "GaussianFilter", "GlowFilter", "GrayscaleFilter", "InvertFilter", "KaleidoscopeFilter", "LightFilter", "NoiseFilter", "SharpenFilter", "SolarizeFilter", "SphereFilter", "ThresholdFilter", "WaterFilter" };
+            String[] strings = { "- Deshabilitar -", "CrystallizeFilter", "DitherFilter", "ExposureFilter", "FBMFilter", "GammaFilter", "GaussianFilter", "GlowFilter", "GrayscaleFilter", "InvertFilter", "KaleidoscopeFilter", "LightFilter", "NoiseFilter", "SharpenFilter", "SolarizeFilter", "SphereFilter", "ThresholdFilter", "WaterFilter" };
             public int getSize() { return strings.length; }
             public Object getElementAt(int i) { return strings[i]; }
         });
         jList1.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         jList1.setToolTipText("");
+        jList1.addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                jList1ListSelectionEvent(e);
+                if (activeWebcam != null) {
+                    ((WIT)activeWebcam.getImageTransformer()).setFilter(jList1.getLeadSelectionIndex());
+                }
+            }
+        });
         jScrollPane1.setViewportView(jList1);
 
         jList2.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(102, 51, 0), 1, true));
@@ -483,6 +494,9 @@ public class CamVerseUI extends javax.swing.JFrame {
         }
     }
     
+    private void jList1ListSelectionEvent(ListSelectionEvent e) {
+        System.out.println(jList1.getModel().getElementAt(jList1.getLeadSelectionIndex()));
+    }
     private void jSlider1ChangeEvent(ChangeEvent e) {
         System.out.println(jSlider1.getValue());
     }

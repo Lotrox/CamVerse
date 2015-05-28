@@ -33,23 +33,23 @@ import java.awt.image.BufferedImageOp;
          * Instancias de filtros disponibles.
          */
         private static final BufferedImageOp[] filters = new BufferedImageOp[] {
-                new GrayscaleFilter(),
-                new GammaFilter(),
-                new NoiseFilter(),
-                new LightFilter(),
-                new KaleidoscopeFilter(),
-                new GaussianFilter(10),
-                new SharpenFilter(),
-                new SolarizeFilter(),
-                new ThresholdFilter(), 
-                new WaterFilter(),
-                new SphereFilter(),
-                new InvertFilter(),
-                new GlowFilter(),
-                new ExposureFilter(),
-                new FBMFilter(),
-                new DitherFilter(),
-                new CrystallizeFilter(),
+            new CrystallizeFilter(),
+            new DitherFilter(),
+            new ExposureFilter(),
+            new FBMFilter(),
+            new GammaFilter(),
+            new GaussianFilter(10),
+            new GlowFilter(),
+            new GrayscaleFilter(),
+            new InvertFilter(),
+            new KaleidoscopeFilter(),
+            new LightFilter(),
+            new NoiseFilter(),
+            new SharpenFilter(),
+            new SolarizeFilter(),
+            new SphereFilter(),
+            new ThresholdFilter(),
+            new WaterFilter()
         };
     
         /**
@@ -62,26 +62,30 @@ import java.awt.image.BufferedImageOp;
          */
         private int rotate;
         
+        /**
+         * Id del filtro que representa el filtro activo. -1 cuando no hay filtro activo.
+         */
+        private int filter;
+        
         public WIT() {
             zoom = 100;
             rotate = 0;
+            filter = 0;
         }
-        
-        /**
-         * Filtros disponibles.
-         */
-        private static volatile BufferedImageOp currentFilter = filters[0];
         
         @Override
         public BufferedImage transform(BufferedImage image) {
             image = rotateBI(image,rotate);
             image = zoomBI(image, zoom/100f);
             
-            BufferedImage modified = new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_INT_RGB);
-            currentFilter.filter(image, modified);
-            
-            modified.flush();
-            return modified;
+            if (filter>0) {
+                BufferedImage modified = new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_INT_RGB);
+                filters[filter-1].filter(image, modified);
+                modified.flush();
+                return modified;
+            } else {
+                return image;
+            }
         }
         
         public void setZoom(int _zoom) {
@@ -90,5 +94,9 @@ import java.awt.image.BufferedImageOp;
         
         public void setRotate(int _rotate) {
             rotate = _rotate;
+        }
+        
+        public void setFilter(int _filter) {
+            filter = _filter;
         }
     }
