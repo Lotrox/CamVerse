@@ -257,7 +257,9 @@ public class CamVerseUI extends javax.swing.JFrame {
         jLabel12.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel12.setText("Ruta de almacenamiento:");
 
-        jLabel13.setText("./");
+        JFileChooser chooser = new JFileChooser();
+        chooser.setCurrentDirectory(new java.io.File("./output/video/"));
+        jLabel13.setText(chooser.getCurrentDirectory().getPath());
 
         jButton3.setText(" ");
         Image img;
@@ -567,16 +569,17 @@ public class CamVerseUI extends javax.swing.JFrame {
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         contador++;
-
         if(contador%3 == 0){
+            contador = 0;
             JFileChooser chooser = new JFileChooser();
-            chooser.setCurrentDirectory(new java.io.File("."));
+            chooser.setCurrentDirectory(new java.io.File("./output/video/"));
             chooser.setDialogTitle("Directorio de guardado");
             chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
             chooser.setAcceptAllFileFilterUsed(false);
 
-            if (chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
-              jLabel13.setText(chooser.getCurrentDirectory().getPath());
+            if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
+              File selectedFile = chooser.getSelectedFile();
+              jLabel13.setText(selectedFile.getAbsolutePath());
               System.out.print(jLabel13.getText());
             } else {
               System.out.println("Ninguna seleccion ");

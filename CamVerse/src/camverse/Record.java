@@ -19,6 +19,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import javax.swing.JToggleButton;
 
 
@@ -36,6 +37,7 @@ public class Record implements Runnable{
     }
     
     public void parar(){
+        jtb.setText("INICIAR GRABACIÓN");
         this.stop = true;
     }
     @Override
@@ -47,19 +49,22 @@ public class Record implements Runnable{
         //Resolucion y codec de video.
         Dimension size = WebcamResolution.VGA.getSize();
         writer.addVideoStream(0, 0, ICodec.ID.CODEC_ID_H264, size.width, size.height);
+        
         long start = System.currentTimeMillis();
         jtb.setText("DETENER GRABACIÓN");
+        int time = (int) (System.currentTimeMillis()/1000);
         
         for (int i = 0; !stop; i++) {
+            if(((int)(System.currentTimeMillis()/1000)-time) % 2 == 0) jtb.setText("DETENER GRABACIÓN");
+            else jtb.setText(String.valueOf((int)(System.currentTimeMillis()/1000)-time) + " SEGUNDOS");
+            BufferedImage image = ConverterFactory.convertToType(wc.getImage(), BufferedImage.TYPE_3BYTE_BGR);
+            IConverter converter = ConverterFactory.createConverter(image, IPixelFormat.Type.YUV420P);
 
-                BufferedImage image = ConverterFactory.convertToType(wc.getImage(), BufferedImage.TYPE_3BYTE_BGR);
-                IConverter converter = ConverterFactory.createConverter(image, IPixelFormat.Type.YUV420P);
+            IVideoPicture frame = converter.toPicture(image, (System.currentTimeMillis() - start) * 1000); // < 1000 cámara rápida. > 1000 cámara lenta.
+            frame.setKeyFrame(i == 0);
+            frame.setQuality(100);
 
-                IVideoPicture frame = converter.toPicture(image, (System.currentTimeMillis() - start) * 1000); // < 1000 cámara rápida. > 1000 cámara lenta.
-                frame.setKeyFrame(i == 0);
-                frame.setQuality(100);
-
-                writer.encodeVideo(0, frame);
+            writer.encodeVideo(0, frame);
 
             try {
                 //30 FPS
@@ -67,10 +72,9 @@ public class Record implements Runnable{
             } catch (InterruptedException ex) {
                 Logger.getLogger(CamVerseUI.class.getName()).log(Level.SEVERE, null, ex);
             }
-            }
+        }
             writer.close();
-            jtb.setText("INICIAR GRABACIÓN");
-            System.out.println("Video recorded in file: " + path);
+            JOptionPane.showMessageDialog(null,"Video grabado en: " + path + "/" + file.getName());
             jtb.setSelected(false);
     }
     
