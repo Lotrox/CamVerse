@@ -72,6 +72,8 @@ public class CamVerseUI extends javax.swing.JFrame {
         activeWebcam.setImageTransformer(new WIT());
         activeWebcam.open();
         jPanel1 = new WebcamPanel(activeWebcam);
+        jList1.setSelectedIndex(0);
+        jList2.setSelectedIndex(0);
         constructLayout();
         getListWebcam(jComboBox1, activeWebcam);
         updateTemplates(jList2,directoryListing("templates",".png"));
@@ -589,9 +591,6 @@ public class CamVerseUI extends javax.swing.JFrame {
             if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
               File selectedFile = chooser.getSelectedFile();
               jLabel13.setText(selectedFile.getAbsolutePath());
-              System.out.print(jLabel13.getText());
-            } else {
-              System.out.println("Ninguna seleccion ");
             }
             jButton3.setSelected(false);
         }

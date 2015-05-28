@@ -155,7 +155,6 @@ public class CamVerseLogic {
      */
     public static BufferedImage getImage(String image) {
         try {
-            System.out.println(image);
             return ImageIO.read(new FileInputStream(image));
         } catch (IOException e) {
             throw new RuntimeException(e);
