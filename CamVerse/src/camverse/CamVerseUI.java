@@ -11,17 +11,19 @@ import com.github.sarxos.webcam.WebcamPanel;
 import com.github.sarxos.webcam.WebcamResolution;
 import java.awt.Image;
 import java.awt.event.ItemEvent;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 import java.io.File;
 import java.io.IOException;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JFileChooser;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 
 public class CamVerseUI extends javax.swing.JFrame {
@@ -37,8 +39,6 @@ public class CamVerseUI extends javax.swing.JFrame {
     /**
      * Creates new form CamVerseUI
      */
-    private int contador = 0;
-    private int numFps = 30;
     
     public CamVerseUI() {
         activeWebcam = null;
@@ -523,7 +523,7 @@ public class CamVerseUI extends javax.swing.JFrame {
         pack();
     }
     
-    private void jComboBox1ItemPerformed(java.awt.event.ItemEvent e) {
+    private void jComboBox1ItemPerformed(java.awt.event.ItemEvent e) {       
         if ((e.getStateChange()==ItemEvent.SELECTED) && (activeWebcam != (Webcam)e.getItem())) {
             if (activeWebcam != null) activeWebcam.close();
             activeWebcam = (Webcam)e.getItem();
@@ -538,16 +538,24 @@ public class CamVerseUI extends javax.swing.JFrame {
 
     private void jCheckBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox1ActionPerformed
         // TODO add your handling code here:
-        if (jPanel1 instanceof WebcamPanel) {
-            ((WebcamPanel)jPanel1).setMirrored(jCheckBox1.isSelected());
+        Date date = new Date(evt.getWhen());
+        if(date.getTime() > anterior.getTime()+200){
+                anterior = new Date();
+            if (jPanel1 instanceof WebcamPanel) {
+                ((WebcamPanel)jPanel1).setMirrored(jCheckBox1.isSelected());
+            }
         }
     }//GEN-LAST:event_jCheckBox1ActionPerformed
 
     private void jCheckBox2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox2ActionPerformed
         // TODO add your handling code here:
-        if (jPanel1 instanceof WebcamPanel) {
-            ((WebcamPanel)jPanel1).setFPSDisplayed(jCheckBox2.isSelected());
-            ((WebcamPanel)jPanel1).setDisplayDebugInfo(jCheckBox2.isSelected());
+        Date date = new Date(evt.getWhen());
+        if(date.getTime() > anterior.getTime()+200){
+            anterior = new Date();
+            if (jPanel1 instanceof WebcamPanel) {
+                ((WebcamPanel)jPanel1).setFPSDisplayed(jCheckBox2.isSelected());
+                ((WebcamPanel)jPanel1).setDisplayDebugInfo(jCheckBox2.isSelected());
+            }
         }
     }//GEN-LAST:event_jCheckBox2ActionPerformed
 
@@ -556,11 +564,7 @@ public class CamVerseUI extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jComboBox3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox3ActionPerformed
-        contador++;
-        if(contador%3 == 0){
-            System.out.print(String.valueOf(jComboBox3.getSelectedItem()+"\n"));
-            numFps = (int)jComboBox3.getSelectedItem();
-        }
+
     }//GEN-LAST:event_jComboBox3ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
@@ -571,15 +575,16 @@ public class CamVerseUI extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jComboBox4ActionPerformed
 
+    Date anterior = new Date();
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        contador++;
-        if(contador%3 == 0){
-            contador = 0;
-            JFileChooser chooser = new JFileChooser();
-            chooser.setCurrentDirectory(new java.io.File("./output/video/"));
-            chooser.setDialogTitle("Directorio de guardado");
-            chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-            chooser.setAcceptAllFileFilterUsed(false);
+        Date date = new Date(evt.getWhen());
+        if(date.getTime() > anterior.getTime()+200){
+                anterior = new Date();
+                JFileChooser chooser = new JFileChooser();
+                chooser.setCurrentDirectory(new java.io.File("./output/video/"));
+                chooser.setDialogTitle("Directorio de guardado");
+                chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+                chooser.setAcceptAllFileFilterUsed(false);
 
             if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
               File selectedFile = chooser.getSelectedFile();
@@ -588,19 +593,22 @@ public class CamVerseUI extends javax.swing.JFrame {
             } else {
               System.out.println("Ninguna seleccion ");
             }
+            jButton3.setSelected(false);
         }
     }//GEN-LAST:event_jButton3ActionPerformed
     
     
     private void jToggleButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButton1ActionPerformed
-            contador++;
-            if(jToggleButton1.getText().equals("INICIAR GRABACIÓN") && (contador%3 == 0)){
-                contador = 0;
-                threadRecord = new Record(activeWebcam, jToggleButton1, jLabel13.getText(), jComboBox3);
-                Thread th = new Thread(threadRecord);
-                th.start();  
+            Date date = new Date(evt.getWhen());
+            if(date.getTime() > anterior.getTime()+200){
+                anterior = new Date();
+                if(jToggleButton1.getText().equals("INICIAR GRABACIÓN")){
+                    threadRecord = new Record(activeWebcam, jToggleButton1, jLabel13.getText(), jComboBox3);
+                    Thread th = new Thread(threadRecord);
+                    th.start();  
+                }
+                if(jToggleButton1.getText().equals("DETENER GRABACIÓN")) threadRecord.parar();  
             }
-            if(jToggleButton1.getText().equals("DETENER GRABACIÓN") && (contador%3 == 0)) threadRecord.parar();         
     }//GEN-LAST:event_jToggleButton1ActionPerformed
 
     /**

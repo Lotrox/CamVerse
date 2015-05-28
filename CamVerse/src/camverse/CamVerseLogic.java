@@ -35,7 +35,6 @@ import java.util.ArrayList;
 
 import java.util.List;
 import javax.imageio.ImageIO;
-import javax.swing.DefaultListModel;
 import javax.swing.JComboBox;
 import javax.swing.JList;
 

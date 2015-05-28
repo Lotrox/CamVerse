@@ -56,7 +56,6 @@ public class Record implements Runnable{
         long start = System.currentTimeMillis();
         jtb.setText("DETENER GRABACIÓN");
         int time = (int) (System.currentTimeMillis()/1000);
-        
         for (int i = 0; !stop; i++) {
             if(((int)(System.currentTimeMillis()/1000)-time) % 2 == 0) jtb.setText("DETENER GRABACIÓN");
             else jtb.setText(String.valueOf((int)(System.currentTimeMillis()/1000)-time) + " SEGUNDOS");
@@ -78,7 +77,6 @@ public class Record implements Runnable{
         }
             writer.close();
             JOptionPane.showMessageDialog(null,"Video grabado en: " + path + "/" + file.getName());
-            jtb.setSelected(false);
     }
     
 }
