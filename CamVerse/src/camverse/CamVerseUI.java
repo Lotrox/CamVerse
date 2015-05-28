@@ -10,6 +10,10 @@ import com.github.sarxos.webcam.Webcam;
 import com.github.sarxos.webcam.WebcamPanel;
 import com.github.sarxos.webcam.WebcamResolution;
 import java.awt.event.ItemEvent;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 public class CamVerseUI extends javax.swing.JFrame {
     /**
@@ -47,6 +51,8 @@ public class CamVerseUI extends javax.swing.JFrame {
         remove(jPanel1);
         // Fija la resolución.
         activeWebcam.setViewSize(WebcamResolution.VGA.getSize());
+        // Transformaciones.
+        activeWebcam.setImageTransformer(new WIT());
         activeWebcam.open();
         jPanel1 = new WebcamPanel(activeWebcam);
         constructLayout();
@@ -256,12 +262,21 @@ public class CamVerseUI extends javax.swing.JFrame {
         jList1.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(102, 51, 0), 1, true));
         jList1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jList1.setModel(new javax.swing.AbstractListModel() {
-            String[] strings = { "CrystallizeFilter", "DitherFilter", "ExposureFilter", "FBMFilter", "GammaFilter", "GaussianFilter", "GlowFilter", "GrayscaleFilter", "InvertFilter", "KaleidoscopeFilter", "LightFilter", "NoiseFilter", "SharpenFilter", "SolarizeFilter", "SphereFilter", "ThresholdFilter", "WaterFilter" };
+            String[] strings = { "- Deshabilitar -", "CrystallizeFilter", "DitherFilter", "ExposureFilter", "FBMFilter", "GammaFilter", "GaussianFilter", "GlowFilter", "GrayscaleFilter", "InvertFilter", "KaleidoscopeFilter", "LightFilter", "NoiseFilter", "SharpenFilter", "SolarizeFilter", "SphereFilter", "ThresholdFilter", "WaterFilter" };
             public int getSize() { return strings.length; }
             public Object getElementAt(int i) { return strings[i]; }
         });
         jList1.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         jList1.setToolTipText("");
+        jList1.addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                jList1ListSelectionEvent(e);
+                if (activeWebcam != null) {
+                    ((WIT)activeWebcam.getImageTransformer()).setFilter(jList1.getLeadSelectionIndex());
+                }
+            }
+        });
         jScrollPane1.setViewportView(jList1);
 
         jList2.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(102, 51, 0), 1, true));
@@ -283,10 +298,38 @@ public class CamVerseUI extends javax.swing.JFrame {
 
         jSlider1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jSlider1.setMaximum(300);
-        jSlider1.setMinimum(100);
+        jSlider1.setMinimum(50);
+        jSlider1.setMajorTickSpacing(50);
+        jSlider1.setMinorTickSpacing(10);
+        jSlider1.setValue(100);
+        jSlider1.setPaintTicks(true);
+        jSlider1.setPaintLabels(true);
+        jSlider1.addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent e) {
+                jSlider1ChangeEvent(e);
+                if (activeWebcam != null) {
+                    ((WIT)activeWebcam.getImageTransformer()).setZoom(jSlider1.getValue());
+                }
+            }
+        });
 
+        jSlider2.setValue(0);
         jSlider2.setMaximum(360);
         jSlider2.setValue(0);
+        jSlider2.setMajorTickSpacing(90);
+        jSlider2.setMinorTickSpacing(10);
+        jSlider2.setPaintTicks(true);
+        jSlider2.setPaintLabels(true);
+        jSlider2.addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent e) {
+                jSlider2ChangeEvent(e);
+                if (activeWebcam != null) {
+                    ((WIT)activeWebcam.getImageTransformer()).setRotate(jSlider2.getValue());
+                }
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -449,7 +492,17 @@ public class CamVerseUI extends javax.swing.JFrame {
             System.out.println("Iniciando " + activeWebcam);
             refreshWebcam();
         }
-    }         
+    }
+    
+    private void jList1ListSelectionEvent(ListSelectionEvent e) {
+        System.out.println(jList1.getModel().getElementAt(jList1.getLeadSelectionIndex()));
+    }
+    private void jSlider1ChangeEvent(ChangeEvent e) {
+        System.out.println(jSlider1.getValue());
+    }
+    private void jSlider2ChangeEvent(ChangeEvent e) {
+        System.out.println(jSlider2.getValue());
+    }
     
     private void jComboBox2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox2ActionPerformed
         // TODO add your handling code here:
