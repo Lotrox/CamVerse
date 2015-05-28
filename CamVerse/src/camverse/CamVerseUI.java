@@ -9,7 +9,7 @@ import static camverse.CamVerseLogic.*;
 import com.github.sarxos.webcam.Webcam;
 import com.github.sarxos.webcam.WebcamPanel;
 import com.github.sarxos.webcam.WebcamResolution;
-import javax.swing.JComboBox;
+import java.awt.event.ItemEvent;
 
 public class CamVerseUI extends javax.swing.JFrame {
     /**
@@ -21,6 +21,8 @@ public class CamVerseUI extends javax.swing.JFrame {
      * Creates new form CamVerseUI
      */
     public CamVerseUI() {
+        activeWebcam = null;
+        
         // Java UI.
         initComponents();
         constructLayout();
@@ -29,7 +31,7 @@ public class CamVerseUI extends javax.swing.JFrame {
         try {
             do {
             // Detecta todas las webcams y las almacena en la lista.
-            activeWebcam = getListWebcam(jComboBox1);
+            activeWebcam = getListWebcam(jComboBox1, activeWebcam);
             if  (activeWebcam==null) Thread.sleep(1000);
             } while (activeWebcam == null);
         } catch (Exception e) {
@@ -44,9 +46,11 @@ public class CamVerseUI extends javax.swing.JFrame {
     }
     
     private void refreshWebcam() {
+        if (jPanel1 instanceof WebcamPanel) ((WebcamPanel)jPanel1).stop();
+        remove(jPanel1);
         jPanel1 = new WebcamPanel(activeWebcam);
         constructLayout();
-        getListWebcam(jComboBox1);
+        getListWebcam(jComboBox1, activeWebcam);
         revalidate();
         repaint();
     }
@@ -94,7 +98,7 @@ public class CamVerseUI extends javax.swing.JFrame {
     }
     
     private void constructLayout() {
-
+        jPanel1.setOpaque(false);
         jPanel1.setBackground(new java.awt.Color(51, 51, 51));
         jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 5));
         jPanel1.setPreferredSize(new java.awt.Dimension(640, 480));
@@ -117,8 +121,15 @@ public class CamVerseUI extends javax.swing.JFrame {
         jLabel1.setToolTipText("");
 
         jComboBox1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        //jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel());
         jComboBox1.setAutoscrolls(true);
+        jComboBox1.addItemListener(new java.awt.event.ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                jComboBox1ItemPerformed(e);
+            }
+        });
 
         jComboBox2.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         jComboBox2.addActionListener(new java.awt.event.ActionListener() {
@@ -430,7 +441,16 @@ public class CamVerseUI extends javax.swing.JFrame {
 
         pack();
     }
-
+    
+    private void jComboBox1ItemPerformed(java.awt.event.ItemEvent e) {
+        if ((e.getStateChange()==ItemEvent.SELECTED) && (activeWebcam != (Webcam)e.getItem())) {
+            if (activeWebcam != null) activeWebcam.close();
+            activeWebcam = (Webcam)e.getItem();
+            System.out.println("Iniciando " + activeWebcam);
+            refreshWebcam();
+        }
+    }         
+    
     private void jComboBox2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox2ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jComboBox2ActionPerformed

@@ -18,12 +18,13 @@ public class CamVerseLogic {
      * <b>Genera la lista de webcams disponibles en el sistema y lo almacena en una lista desplegable de Java.</b>
      * @param jcb Lista desplegable de Java.
      */
-    public static Webcam getListWebcam(JComboBox jcb) {
+    public static Webcam getListWebcam(JComboBox jcb, Webcam active) {
         jcb.removeAllItems();
+        if (active!=null) jcb.addItem(active);
         List<Webcam> l = Webcam.getWebcams();
         for (Webcam w : l) {
-            jcb.addItem(w);
+            if (active!=w) jcb.addItem(w);
         }
-        return (l.isEmpty()) ? null : l.get(0);
+        return (l.isEmpty()) ? null : (active!=null) ? active : Webcam.getDefault();
     }
 }
