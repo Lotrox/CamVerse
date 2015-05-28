@@ -34,6 +34,7 @@ public class CamVerseUI extends javax.swing.JFrame {
      * Hilo para ejecutar la grabación de vídeo.
      */
     Record threadRecord;
+    Capture threadImg;
 
     /**
      * Creates new form CamVerseUI
@@ -242,6 +243,7 @@ public class CamVerseUI extends javax.swing.JFrame {
         jButton2.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jButton2.setText("Tomar instantánea");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
+            @Override
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton2ActionPerformed(evt);
             }
@@ -251,7 +253,7 @@ public class CamVerseUI extends javax.swing.JFrame {
         jLabel11.setText("Retardo:");
 
         jComboBox4.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jComboBox4.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "0 segundos", "5 segundos", "10 segundos", "15 segundos" }));
+        jComboBox4.setModel(new javax.swing.DefaultComboBoxModel(new Integer[] { 0, 3, 5, 10 }));
         jComboBox4.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jComboBox4ActionPerformed(evt);
@@ -262,7 +264,7 @@ public class CamVerseUI extends javax.swing.JFrame {
         jLabel12.setText("Ruta de almacenamiento:");
 
         JFileChooser chooser = new JFileChooser();
-        chooser.setCurrentDirectory(new java.io.File("./output/video/"));
+        chooser.setCurrentDirectory(new java.io.File("./output/"));
         jLabel13.setText(chooser.getCurrentDirectory().getPath());
 
         jButton3.setText(" ");
@@ -276,6 +278,7 @@ public class CamVerseUI extends javax.swing.JFrame {
             Logger.getLogger(CamVerseUI.class.getName()).log(Level.SEVERE, null, ex);
         }
         jButton3.addActionListener(new java.awt.event.ActionListener() {
+            @Override
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton3ActionPerformed(evt);
             }
@@ -284,6 +287,7 @@ public class CamVerseUI extends javax.swing.JFrame {
         jToggleButton1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jToggleButton1.setText("INICIAR GRABACIÓN");
         jToggleButton1.addActionListener(new java.awt.event.ActionListener() {
+            @Override
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jToggleButton1ActionPerformed(evt);
             }
@@ -569,7 +573,15 @@ public class CamVerseUI extends javax.swing.JFrame {
     }//GEN-LAST:event_jComboBox3ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
+
+        Date date = new Date(evt.getWhen());
+        if((date.getTime() > anterior.getTime()+200) && jButton2.getText().equals("Tomar instantánea")){
+            anterior = new Date();
+            new File(jLabel13.getText() + "/img/").mkdirs();
+            threadImg = new Capture((int)jComboBox4.getSelectedItem(),activeWebcam, jLabel13.getText(), jButton2);
+            Thread th = new Thread(threadImg);
+            th.start();      
+        }
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jComboBox4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox4ActionPerformed
@@ -604,8 +616,10 @@ public class CamVerseUI extends javax.swing.JFrame {
                     threadRecord = new Record(activeWebcam, jToggleButton1, jLabel13.getText(), jComboBox3);
                     Thread th = new Thread(threadRecord);
                     th.start();  
-                }
-                if(jToggleButton1.getText().equals("DETENER GRABACIÓN")) threadRecord.parar();  
+                }else{
+                    jToggleButton1.setSelected(false);
+                    threadRecord.parar();
+                }  
             }
     }//GEN-LAST:event_jToggleButton1ActionPerformed
 

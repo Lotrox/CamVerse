@@ -29,8 +29,8 @@ public class Record implements Runnable{
     private final Webcam wc; 
     private final JToggleButton jtb;
     private boolean stop;
-    private String path;
-    private JComboBox jcb;
+    private final String path;
+    private final JComboBox jcb;
     
     public Record (Webcam activeWebcam, JToggleButton jtb, String path, JComboBox jcb){
         this.wc = activeWebcam;
@@ -45,10 +45,12 @@ public class Record implements Runnable{
     }
     @Override
     public void run() {
-        // Nombre del fichero a guardar en formato mp4.
-        File file = new File(path + "/Video-" + System.currentTimeMillis() + ".mp4");
-        IMediaWriter writer = ToolFactory.makeWriter(file.getAbsolutePath());
         
+        // Nombre del fichero a guardar en formato mp4.
+        new File(path + "/video/").mkdirs();
+        File file = new File(path + "/video/Video-" + System.currentTimeMillis() + ".mp4");
+        IMediaWriter writer = ToolFactory.makeWriter(file.getAbsolutePath());
+       
         //Resolucion y codec de video.
         Dimension size = WebcamResolution.VGA.getSize();
         writer.addVideoStream(0, 0, ICodec.ID.CODEC_ID_H264, size.width, size.height);
@@ -59,6 +61,7 @@ public class Record implements Runnable{
         for (int i = 0; !stop && wc.isOpen(); i++) {
             if(((int)(System.currentTimeMillis()/1000)-time) % 2 == 0) jtb.setText("DETENER GRABACIÓN");
             else jtb.setText(String.valueOf((int)(System.currentTimeMillis()/1000)-time) + " SEGUNDOS");
+            
             BufferedImage image = ConverterFactory.convertToType(wc.getImage(), BufferedImage.TYPE_3BYTE_BGR);
             IConverter converter = ConverterFactory.createConverter(image, IPixelFormat.Type.YUV420P);
 
@@ -68,15 +71,14 @@ public class Record implements Runnable{
 
             writer.encodeVideo(0, frame);
 
-            try {
-                //30 FPS por defecto
-                Thread.sleep(1000/(int)jcb.getSelectedItem());
+            try {               
+                Thread.sleep(1000/(int)jcb.getSelectedItem());//30 FPS por defecto
+                writer.close();
+                JOptionPane.showMessageDialog(null,"Video grabado en: " + path + "/" + file.getName());
             } catch (InterruptedException ex) {
                 Logger.getLogger(CamVerseUI.class.getName()).log(Level.SEVERE, null, ex);
             }
-        }
-            writer.close();
-            JOptionPane.showMessageDialog(null,"Video grabado en: " + path + "/" + file.getName());
+        } 
     }
     
 }
