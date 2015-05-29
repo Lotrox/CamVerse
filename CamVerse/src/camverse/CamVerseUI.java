@@ -646,11 +646,12 @@ public class CamVerseUI extends javax.swing.JFrame {
 
         Date date = new Date(evt.getWhen());
         if((date.getTime() > anterior.getTime()+200) && jButton2.getText().equals("Tomar instantánea")){
-            anterior = new Date();
-            new File(jLabel13.getText() + "/img/").mkdirs();
-            threadImg = new Capture((int)jComboBox4.getSelectedItem(),activeWebcam, jLabel13.getText(), jButton2);
-            Thread th = new Thread(threadImg);
-            th.start();      
+                anterior = new Date();
+                
+                new File(jLabel13.getText() + "/img/").mkdirs();
+                threadImg = new Capture((int)jComboBox4.getSelectedItem(),activeWebcam, jLabel13.getText(), jButton2);
+                Thread th = new Thread(threadImg);
+                th.start(); 
         }
     }//GEN-LAST:event_jButton2ActionPerformed
 

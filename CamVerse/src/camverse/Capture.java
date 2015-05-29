@@ -26,9 +26,10 @@ public class Capture implements Runnable {
         this.delay = time;
         this.jb = jb;
     }
-    
+ 
     @Override
     public void run() {
+        
         for(int i=delay;i>0;i--){
             try {
                 jb.setText(i + " segundos");
@@ -42,6 +43,8 @@ public class Capture implements Runnable {
             jb.setText("SONRÍE!");
             Thread.sleep(40);
             String nombre = "/img/Image-" + System.currentTimeMillis();
+            Audio aud = new Audio();
+            aud.init();
             WebcamUtils.capture(wc, path + nombre, ImageUtils.FORMAT_PNG);
             Thread.sleep(500);
             JOptionPane.showMessageDialog(null,"Imagen guardada en: '" + path + nombre + "'\n¡Esperemos que hayas salido guapo! (Siempre que no seas informático)");
