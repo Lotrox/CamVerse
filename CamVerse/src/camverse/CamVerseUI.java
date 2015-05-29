@@ -10,6 +10,8 @@ import com.github.sarxos.webcam.Webcam;
 import com.github.sarxos.webcam.WebcamPanel;
 import java.awt.Dimension;
 import java.awt.Image;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 import java.awt.event.ItemEvent;
 import java.io.File;
 import java.io.IOException;
@@ -143,6 +145,24 @@ public class CamVerseUI extends javax.swing.JFrame {
         jPanel1.setBackground(new java.awt.Color(51, 51, 51));
         jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(102, 0, 0), 5));
         jPanel1.setPreferredSize(new java.awt.Dimension(640, 480));
+        jPanel1.addComponentListener(new ComponentListener() {
+            @Override
+            public void componentResized(ComponentEvent e) {
+                jPanel1.setPreferredSize(new java.awt.Dimension(640, 480));
+                revalidate();
+                repaint();
+                jPanel1.setSize(new java.awt.Dimension(640, 480));
+                repaint();
+                repaint();
+            }
+            @Override
+            public void componentMoved(ComponentEvent e) {}
+            @Override
+            public void componentShown(ComponentEvent e) {}
+            @Override
+            public void componentHidden(ComponentEvent e) {}
+
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
