@@ -191,7 +191,6 @@ public class CamVerseUI extends javax.swing.JFrame {
         jLabel1.setForeground(new java.awt.Color(0, 102, 102));
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("CamVerse");
-        jLabel1.setToolTipText("");
 
         jComboBox1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         //jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
@@ -343,12 +342,12 @@ public class CamVerseUI extends javax.swing.JFrame {
         jList1.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(102, 51, 0), 1, true));
         jList1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jList1.setModel(new javax.swing.AbstractListModel() {
-            String[] strings = { "- Deshabilitar -", "DitherFilter", "ExposureFilter", "FBMFilter", "GammaFilter", "GaussianFilter", "GlowFilter", "GrayscaleFilter", "InvertFilter", "KaleidoscopeFilter", "LightFilter", "CrystallizeFilter", "NoiseFilter", "SharpenFilter", "SolarizeFilter", "SphereFilter", "ThresholdFilter", "WaterFilter" };
+            String[] strings = { "- Deshabilitar -", "DitherFilter", "ExposureFilter", "GammaFilter", "GaussianFilter", "GlowFilter", "GrayscaleFilter", "InvertFilter", "KaleidoscopeFilter", "LightFilter", "NoiseFilter", "SharpenFilter", "SolarizeFilter", "SphereFilter", "ThresholdFilter", "WaterFilter", "PinchFilter", "EdgeFilter", "WeaveFilter", "EmbossFilter", "PolarFilter", "LookupFilter" };
             public int getSize() { return strings.length; }
             public Object getElementAt(int i) { return strings[i]; }
         });
         jList1.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
-        jList1.setToolTipText("");
+        jList1.setToolTipText("Seleccionar para activar un filtro.");
         jList1.addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent e) {
@@ -367,7 +366,7 @@ public class CamVerseUI extends javax.swing.JFrame {
             public Object getElementAt(int i) { return strings[i]; }
         });
         jList2.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
-        jList2.setToolTipText("");
+        jList2.setToolTipText("Seleccionar para activar un tipo de marco.");
         jList2.addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent e) {
@@ -601,7 +600,6 @@ public class CamVerseUI extends javax.swing.JFrame {
             String sA = activeWebcam.getViewSize().toString().substring(18);
             String sJ = (String) jComboBox2.getSelectedItem();
             if (!sA.equals(sJ)) {
-                System.out.println(sA + "," + sJ);
                 Dimension def = null;
                 for (Dimension d : dalt) {
                     if (d.toString().substring(18).equals(sJ)) {

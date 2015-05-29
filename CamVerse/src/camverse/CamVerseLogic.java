@@ -6,23 +6,7 @@
 package camverse;
 
 import com.github.sarxos.webcam.Webcam;
-import com.jhlabs.image.CrystallizeFilter;
-import com.jhlabs.image.DitherFilter;
-import com.jhlabs.image.ExposureFilter;
-import com.jhlabs.image.FBMFilter;
-import com.jhlabs.image.GammaFilter;
-import com.jhlabs.image.GaussianFilter;
-import com.jhlabs.image.GlowFilter;
-import com.jhlabs.image.GrayscaleFilter;
-import com.jhlabs.image.InvertFilter;
-import com.jhlabs.image.KaleidoscopeFilter;
-import com.jhlabs.image.LightFilter;
-import com.jhlabs.image.NoiseFilter;
-import com.jhlabs.image.SharpenFilter;
-import com.jhlabs.image.SolarizeFilter;
-import com.jhlabs.image.SphereFilter;
-import com.jhlabs.image.ThresholdFilter;
-import com.jhlabs.image.WaterFilter;
+import com.jhlabs.image.*;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
@@ -33,7 +17,6 @@ import java.io.FilenameFilter;
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -56,7 +39,6 @@ public class CamVerseLogic {
     private static final BufferedImageOp[] filters = new BufferedImageOp[] {
         new DitherFilter(),
         new ExposureFilter(),
-        new FBMFilter(),
         new GammaFilter(),
         new GaussianFilter(10),
         new GlowFilter(),
@@ -64,13 +46,18 @@ public class CamVerseLogic {
         new InvertFilter(),
         new KaleidoscopeFilter(),
         new LightFilter(),
-        new CrystallizeFilter(),
         new NoiseFilter(),
         new SharpenFilter(),
         new SolarizeFilter(),
         new SphereFilter(),
         new ThresholdFilter(),
-        new WaterFilter()
+        new WaterFilter(),
+        new PinchFilter(),
+        new EdgeFilter(),
+        new WeaveFilter(),
+        new EmbossFilter(),
+        new PolarFilter(),
+        new LookupFilter()
     };
 
     /**
