@@ -76,6 +76,8 @@ public class Record implements Runnable{
                 Logger.getLogger(CamVerseUI.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
+        jtb.setText("INICIAR GRABACIÓN");
+        jtb.setSelected(false);
         writer.close();
         JOptionPane.showMessageDialog(null,"Video grabado en: " + path + "/" + file.getName());
     }
