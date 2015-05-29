@@ -709,9 +709,21 @@ public class CamVerseUI extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new CamVerseUI().setVisible(true);
+                CamVerseUI X = new CamVerseUI();
+                Thread tQR = new Thread(new QR(X));
+                tQR.setDaemon(true);
+                X.setVisible(true);
+                tQR.start();
             }
         });
+    }
+    
+    /**
+     * <b>Devuelve la webcam que esté activa en la interfaz.</b>
+     * @return {@link #activeWebcam}
+     */
+    public Webcam getWebcam() {
+        return activeWebcam;
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
