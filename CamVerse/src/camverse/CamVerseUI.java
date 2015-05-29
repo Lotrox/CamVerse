@@ -17,6 +17,13 @@ import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
+import javax.sound.sampled.AudioFormat;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.DataLine;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.event.ChangeEvent;
@@ -576,11 +583,12 @@ public class CamVerseUI extends javax.swing.JFrame {
 
         Date date = new Date(evt.getWhen());
         if((date.getTime() > anterior.getTime()+200) && jButton2.getText().equals("Tomar instantánea")){
-            anterior = new Date();
-            new File(jLabel13.getText() + "/img/").mkdirs();
-            threadImg = new Capture((int)jComboBox4.getSelectedItem(),activeWebcam, jLabel13.getText(), jButton2);
-            Thread th = new Thread(threadImg);
-            th.start();      
+                anterior = new Date();
+                
+                new File(jLabel13.getText() + "/img/").mkdirs();
+                threadImg = new Capture((int)jComboBox4.getSelectedItem(),activeWebcam, jLabel13.getText(), jButton2);
+                Thread th = new Thread(threadImg);
+                th.start(); 
         }
     }//GEN-LAST:event_jButton2ActionPerformed
 
