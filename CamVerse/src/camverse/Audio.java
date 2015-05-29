@@ -23,7 +23,7 @@ public class Audio extends Applet
     {          
         try {
             Clip clip = AudioSystem.getClip();
-            clip.open(AudioSystem.getAudioInputStream(new File("cam1.wav")));
+            clip.open(AudioSystem.getAudioInputStream(new File("./src/resources/sounds/cam1.wav")));
             clip.start();
         } catch (LineUnavailableException | IOException | UnsupportedAudioFileException ex) {
             Logger.getLogger(Audio.class.getName()).log(Level.SEVERE, null, ex);
