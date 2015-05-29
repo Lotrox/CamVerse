@@ -22,6 +22,7 @@ import javax.imageio.ImageIO;
 import javax.swing.ComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ListSelectionEvent;
@@ -61,19 +62,25 @@ public class CamVerseUI extends javax.swing.JFrame {
         
         // Java UI.
         initComponents();
-        constructLayout();
         
         // Establece la primera en activa.
+        int c = 0;
         try {
             do {
+            ++c;
+            if (c>3) {
+                JOptionPane.showMessageDialog(this, "No se ha encontrado ninguna web cam disponible. La aplicación finaliza.");
+                System.exit(1);
+            }
             // Detecta todas las webcams y las almacena en la lista.
             activeWebcam = getListWebcam(jComboBox1, activeWebcam);
-            if  (activeWebcam==null) Thread.sleep(1000);
+            if (activeWebcam!=null && activeWebcam.getLock().isLocked()) activeWebcam = null;
+            if (activeWebcam==null) Thread.sleep(1000);
             } while (activeWebcam == null);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        
+
         // Enciende la webcam.
         refreshWebcam();
     }
@@ -563,12 +570,19 @@ public class CamVerseUI extends javax.swing.JFrame {
         pack();
     }
     
-    private void jComboBox1ItemPerformed(java.awt.event.ItemEvent e) {       
+    private synchronized void jComboBox1ItemPerformed(java.awt.event.ItemEvent e) {       
         if ((e.getStateChange()==ItemEvent.SELECTED) && (activeWebcam != (Webcam)e.getItem())) {
-            if (activeWebcam != null) activeWebcam.close();
-            activeWebcam = (Webcam)e.getItem();
-            System.out.println("Iniciando " + activeWebcam);
-            refreshWebcam();
+            if (!((Webcam)e.getItem()).getLock().isLocked()) {
+                if (activeWebcam != null) activeWebcam.close();
+                activeWebcam = (Webcam)e.getItem();
+                System.out.println("Iniciando " + activeWebcam);
+                refreshWebcam();
+            } else {
+                if (jComboBox1.getSelectedItem()==e.getItem()) {
+                    jComboBox1.setSelectedItem(activeWebcam);
+                    JOptionPane.showMessageDialog(this, ((Webcam)e.getItem()).getName() + " no disponible.");
+                }
+            }
         }
     }
     

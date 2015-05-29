@@ -6,7 +6,6 @@
 package camverse;
 
 import com.github.sarxos.webcam.Webcam;
-import com.github.sarxos.webcam.WebcamResolution;
 import com.jhlabs.image.CrystallizeFilter;
 import com.jhlabs.image.DitherFilter;
 import com.jhlabs.image.ExposureFilter;
@@ -77,9 +76,12 @@ public class CamVerseLogic {
         if (active!=null) jcb.addItem(active);
         List<Webcam> l = Webcam.getWebcams();
         for (Webcam w : l) {
-            if (active!=w) jcb.addItem(w);
+            if (active!=w && !w.getLock().isLocked()) jcb.addItem(w);
         }
-        return (l.isEmpty()) ? null : (active!=null) ? active : Webcam.getDefault();
+        for (Webcam w : l) {
+            if (active!=w && w.getLock().isLocked()) jcb.addItem(w);
+        }
+        return (l.isEmpty()) ? null : (active!=null) ? active : (Webcam)jcb.getItemAt(0);
     }
     
     public static Dimension[] updateResolution(Webcam activeWebcam, JComboBox jcb) {
@@ -88,7 +90,6 @@ public class CamVerseLogic {
         for (int i=ds.length-1; i>=0; --i) {
             jcb.addItem(ds[i].toString().substring(18));
         }
-//        jcb.addItem(" - Apagar Webcam - ");
         activeWebcam.setViewSize(ds[ds.length-1]);
         return ds;
     }
