@@ -35,7 +35,13 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.imageio.ImageIO;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.JComboBox;
 import javax.swing.JList;
 
@@ -258,5 +264,21 @@ public class CamVerseLogic {
             public int getSize() { return strings.length; }
             public Object getElementAt(int i) { return strings[i]; }
         });
+    }
+    /**
+     * <b>Dado un fichero, reproduce el sonido dado si es posible.<b>
+     * @param file Nombre del sonido a ejecutar (debe estar en la carpeta resources/sounds).
+     */
+    public static synchronized void playSound(String file){    
+        Clip clip = null;
+        
+        if(clip != null) clip.stop();
+        try {
+            clip = AudioSystem.getClip();
+            clip.open(AudioSystem.getAudioInputStream(new File("./resources/sounds/" + file)));
+            clip.start();
+        } catch (LineUnavailableException | IOException | UnsupportedAudioFileException ex) {
+            Logger.getLogger(CamVerseLogic.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 }

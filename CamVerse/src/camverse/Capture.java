@@ -19,12 +19,14 @@ public class Capture implements Runnable {
     private final String path;
     private final int delay;
     private JButton jb;
+    private final Audio sound;
     
     public Capture(int time, Webcam wc, String path, JButton jb){
         this.wc = wc;
         this.path = path;
         this.delay = time;
         this.jb = jb;
+        sound = new Audio();
     }
  
     @Override
@@ -32,6 +34,7 @@ public class Capture implements Runnable {
         
         for(int i=delay;i>0;i--){
             try {
+                sound.playSound("cam3.wav");
                 jb.setText(i + " segundos");
                 Thread.sleep(1000); // Tiempo de espera hasta la captura.
             } catch (InterruptedException ex) {
@@ -43,8 +46,7 @@ public class Capture implements Runnable {
             jb.setText("SONRÍE!");
             Thread.sleep(40);
             String nombre = "/img/Image-" + System.currentTimeMillis();
-            Audio aud = new Audio();
-            aud.init();
+            sound.playSound("cam1.wav");
             WebcamUtils.capture(wc, path + nombre, ImageUtils.FORMAT_PNG);
             Thread.sleep(500);
             JOptionPane.showMessageDialog(null,"Imagen guardada en: '" + path + nombre + "'\n¡Esperemos que hayas salido guapo! (Siempre que no seas informático)");

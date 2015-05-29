@@ -30,12 +30,14 @@ public class Record implements Runnable{
     private boolean stop;
     private final String path;
     private final JComboBox jcb;
+    private final Audio sound;
     
     public Record (Webcam activeWebcam, JToggleButton jtb, String path, JComboBox jcb){
         this.wc = activeWebcam;
         this.jtb = jtb;
         this.path = path;
         this.jcb = jcb;
+        sound = new Audio();
     }
     
     public void parar(){
@@ -56,6 +58,7 @@ public class Record implements Runnable{
         
         long start = System.currentTimeMillis();
         jtb.setText("DETÉN GRABACIÓN");
+        sound.playSound("cam2.wav");
         int time = (int) (System.currentTimeMillis()/1000);
         for (int i = 0; !stop && wc.isOpen(); i++) {
             if(((int)(System.currentTimeMillis()/1000)-time) % 2 == 0) jtb.setText("DETÉN GRABACIÓN");
@@ -79,6 +82,7 @@ public class Record implements Runnable{
         jtb.setText("INICIAR GRABACIÓN");
         jtb.setSelected(false);
         writer.close();
+        sound.playSound("cam2.wav");
         JOptionPane.showMessageDialog(null,"Video grabado en: " + path + "/" + file.getName());
     }
     

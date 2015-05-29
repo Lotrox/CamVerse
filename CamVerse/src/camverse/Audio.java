@@ -1,10 +1,13 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
 package camverse;
 
-import java.applet.*;
-import java.awt.*;
 import java.io.File;
 import java.io.IOException;
-import java.net.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.sound.sampled.AudioSystem;
@@ -12,38 +15,30 @@ import javax.sound.sampled.Clip;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 
-
-public class Audio extends Applet
-{
-    URL codb;
-    Image picture;
-    AudioClip clip;
-
-    public void init()
-    {          
+/**
+ *
+ * @author Lotrox
+ */
+public class Audio {
+    
+    private Clip clip;
+    
+    /**
+     * <b>Dado un fichero, reproduce el sonido dado si es posible.<b>
+     * @param file Nombre del sonido a ejecutar (debe estar en la carpeta resources/sounds).
+     */
+    public synchronized void playSound(String file){    
+        stopSound();
         try {
-            Clip clip = AudioSystem.getClip();
-            clip.open(AudioSystem.getAudioInputStream(new File("./resources/sounds/cam1.wav")));
+            clip = AudioSystem.getClip();
+            clip.open(AudioSystem.getAudioInputStream(new File("./resources/sounds/" + file)));
             clip.start();
         } catch (LineUnavailableException | IOException | UnsupportedAudioFileException ex) {
-            Logger.getLogger(Audio.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(CamVerseLogic.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-
-    @Override
-    public String getAppletInfo()
-    {
-        return "Hi...";
-    }
-
-    @Override
-    public void start() { 
-        
-       // showStatus(getAppletInfo());
-    }
-
-    public void paint(Graphics g)
-    {
-        g.drawImage(picture, 10, 10, this);
+    
+    public void stopSound(){
+        if(clip != null) clip.stop();
     }
 }

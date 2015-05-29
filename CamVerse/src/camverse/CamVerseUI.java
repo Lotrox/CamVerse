@@ -53,12 +53,17 @@ public class CamVerseUI extends javax.swing.JFrame {
     private Dimension[] dalt;
     
     /**
+     * Sonidos del programa.
+     */
+    Audio sound;
+    /**
      * <b>Constructor de interfaz gráfica.</b>
      */
     public CamVerseUI() {
         activeWebcam = null;
         threadRecord = null;
         dalt = null;
+        sound = new Audio();
         
         // Java UI.
         initComponents();
@@ -368,6 +373,8 @@ public class CamVerseUI extends javax.swing.JFrame {
             public void valueChanged(ListSelectionEvent e) {
                 if (activeWebcam != null) {
                     if (jList2.getLeadSelectionIndex() > 0) {
+                        if(((String)jList2.getModel().getElementAt(jList2.getSelectedIndex())).equals("Navidad")) sound.playSound("easter.wav");
+                        else sound.stopSound();
                         ((WIT)activeWebcam.getImageTransformer()).setTemplate(((String)jList2.getModel().getElementAt(jList2.getSelectedIndex())) + ".png");
                     } else {
                         ((WIT)activeWebcam.getImageTransformer()).setTemplate(null);
