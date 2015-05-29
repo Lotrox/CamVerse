@@ -312,7 +312,7 @@ public class CamVerseUI extends javax.swing.JFrame {
         jButton3.setText(" ");
         Image img;
         try {
-            img = ImageIO.read(new File("src/resources/save.png"));
+            img = ImageIO.read(new File("resources/save.png"));
             jButton3.setIcon(new ImageIcon(img));
             jButton3.setHorizontalAlignment(NORMAL);
             
