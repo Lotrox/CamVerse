@@ -52,14 +52,14 @@ public class Record implements Runnable{
         IMediaWriter writer = ToolFactory.makeWriter(file.getAbsolutePath());
        
         //Resolucion y codec de video.
-        Dimension size = WebcamResolution.VGA.getSize();
+        Dimension size = wc.getViewSize();
         writer.addVideoStream(0, 0, ICodec.ID.CODEC_ID_H264, size.width, size.height);
         
         long start = System.currentTimeMillis();
         jtb.setText("DETENER GRABACIÓN");
         int time = (int) (System.currentTimeMillis()/1000);
         for (int i = 0; !stop && wc.isOpen(); i++) {
-            if(((int)(System.currentTimeMillis()/1000)-time) % 2 == 0) jtb.setText("DETENER GRABACIÓN");
+            if(((int)(System.currentTimeMillis()/1000)-time) % 2 == 0) jtb.setText("DETÉN GRABACIÓN");
             else jtb.setText(String.valueOf((int)(System.currentTimeMillis()/1000)-time) + " SEGUNDOS");
             
             BufferedImage image = ConverterFactory.convertToType(wc.getImage(), BufferedImage.TYPE_3BYTE_BGR);
