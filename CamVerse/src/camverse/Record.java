@@ -6,7 +6,6 @@
 package camverse;
 
 import com.github.sarxos.webcam.Webcam;
-import com.github.sarxos.webcam.WebcamResolution;
 import com.xuggle.mediatool.IMediaWriter;
 import com.xuggle.mediatool.ToolFactory;
 import com.xuggle.xuggler.ICodec;
@@ -56,7 +55,7 @@ public class Record implements Runnable{
         writer.addVideoStream(0, 0, ICodec.ID.CODEC_ID_H264, size.width, size.height);
         
         long start = System.currentTimeMillis();
-        jtb.setText("DETENER GRABACIÓN");
+        jtb.setText("DETÉN GRABACIÓN");
         int time = (int) (System.currentTimeMillis()/1000);
         for (int i = 0; !stop && wc.isOpen(); i++) {
             if(((int)(System.currentTimeMillis()/1000)-time) % 2 == 0) jtb.setText("DETÉN GRABACIÓN");
@@ -73,12 +72,12 @@ public class Record implements Runnable{
 
             try {               
                 Thread.sleep(1000/(int)jcb.getSelectedItem());//30 FPS por defecto
-                writer.close();
-                JOptionPane.showMessageDialog(null,"Video grabado en: " + path + "/" + file.getName());
             } catch (InterruptedException ex) {
                 Logger.getLogger(CamVerseUI.class.getName()).log(Level.SEVERE, null, ex);
             }
-        } 
+        }
+        writer.close();
+        JOptionPane.showMessageDialog(null,"Video grabado en: " + path + "/" + file.getName());
     }
     
 }
