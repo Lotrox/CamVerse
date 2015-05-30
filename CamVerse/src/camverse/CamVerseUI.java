@@ -731,6 +731,13 @@ public class CamVerseUI extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 CamVerseUI X = new CamVerseUI();
+                X.setTitle("CamVerse v1.0");
+                try {
+                    Image img = ImageIO.read(new File("resources/icon.png"));
+                    X.setIconImage(img);
+                } catch (IOException ex) {
+                    Logger.getLogger(CamVerseUI.class.getName()).log(Level.SEVERE, null, ex);
+                }
                 Thread tQR = new Thread(new QR(X));
                 tQR.setDaemon(true);
                 X.setVisible(true);

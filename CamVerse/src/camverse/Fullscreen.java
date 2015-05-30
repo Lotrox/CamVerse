@@ -10,6 +10,11 @@ import com.github.sarxos.webcam.WebcamPanel;
 import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.File;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 
 /**
@@ -28,6 +33,12 @@ public class Fullscreen extends JFrame {
      */
     public Fullscreen(CamVerseUI _instance) {
         super(_instance.getWebcam().getName());
+        try {
+            Image img = ImageIO.read(new File("resources/icon.png"));
+            this.setIconImage(img);
+        } catch (IOException ex) {
+            Logger.getLogger(Fullscreen.class.getName()).log(Level.SEVERE, null, ex);
+        }
         instance = _instance;
         instance.setEnabled(false);
         instance.setVisible(false);
