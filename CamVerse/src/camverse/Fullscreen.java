@@ -8,7 +8,6 @@ package camverse;
 import com.github.sarxos.webcam.Webcam;
 import com.github.sarxos.webcam.WebcamPanel;
 import java.awt.*;
-import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.IOException;
@@ -43,13 +42,6 @@ public class Fullscreen extends JFrame {
         instance.setEnabled(false);
         instance.setVisible(false);
         setExtendedState(java.awt.Frame.MAXIMIZED_BOTH);
-        this.addWindowListener(new WindowAdapter() {
-            @Override
-            public void windowClosing(WindowEvent e) {
-                instance.setEnabled(true);
-                instance.setVisible(true);
-            }  
-        });
         setLayout(new FlowLayout());
         
         Webcam wc = _instance.getWebcam();
@@ -88,5 +80,16 @@ public class Fullscreen extends JFrame {
 //        setUndecorated(true);
         Rectangle maximumWindowBounds=graphicsEnvironment.getMaximumWindowBounds();
         setBounds(maximumWindowBounds);
+    }
+
+    @Override
+    protected void processWindowEvent(WindowEvent e) {
+        if(e.getID() == WindowEvent.WINDOW_CLOSING) {
+            instance.setEnabled(true);
+            instance.setVisible(true);
+            this.setVisible(false);
+            this.setEnabled(false);
+            this.dispose();
+        }
     }
 }

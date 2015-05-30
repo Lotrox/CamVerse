@@ -100,6 +100,9 @@ public class CamVerseUI extends javax.swing.JFrame {
         activeWebcam.open(); // Abre la webcam al mundo.
 
         jPanel1 = new WebcamPanel(activeWebcam);
+        ((WebcamPanel)jPanel1).setMirrored(jCheckBox1.isSelected());
+        ((WebcamPanel)jPanel1).setFPSDisplayed(jCheckBox2.isSelected());
+        ((WebcamPanel)jPanel1).setDisplayDebugInfo(jCheckBox2.isSelected());
         jList1.setSelectedIndex(0);
         jList2.setSelectedIndex(0);
         constructLayout();
@@ -641,7 +644,11 @@ public class CamVerseUI extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-        new Fullscreen(this).setVisible(true);
+        Date date = new Date(evt.getWhen());
+        if(date.getTime() > anterior.getTime()+200){
+            anterior = new Date();
+            new Fullscreen(this).setVisible(true);
+        }
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jComboBox3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox3ActionPerformed
