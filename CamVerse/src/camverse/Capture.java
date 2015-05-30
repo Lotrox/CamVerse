@@ -18,7 +18,7 @@ public class Capture implements Runnable {
     private final Webcam wc;
     private final String path;
     private final int delay;
-    private JButton jb;
+    private final JButton jb;
     private final Audio sound;
     
     public Capture(int time, Webcam wc, String path, JButton jb){

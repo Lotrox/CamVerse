@@ -1,3 +1,8 @@
+/**
+ * @author José Ángel Pastrana Padilla.
+ * @author Daniel Martínez Caballero
+ */
+
 
 package camverse;
 

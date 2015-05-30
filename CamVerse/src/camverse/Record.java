@@ -74,7 +74,7 @@ public class Record implements Runnable{
             writer.encodeVideo(0, frame);
 
             try {               
-                Thread.sleep(1000/(int)jcb.getSelectedItem());//30 FPS por defecto
+                Thread.sleep(1000/(int)jcb.getSelectedItem()); //Espera para generar los FPS dados.
             } catch (InterruptedException ex) {
                 Logger.getLogger(CamVerseUI.class.getName()).log(Level.SEVERE, null, ex);
             }
